@@ -6,11 +6,11 @@ The script is in charge of moving them to the right directory in the `/Photos` d
 Build the container:
 
 ```
-podman build -f Containerfile --tag quay.io/gleboude/photos-triage:latest .
+podman build -f Containerfile --tag quay.io/goneri/photos-triage:latest .
 ```
 
 And run the script:
 
 ```
-podman run -it --volume ./secret:/secret:z quay.io/gleboude/photos-triage:latest
+podman run -it --volume ./secret:/secret:z quay.io/goneri/photos-triage:latest
 ```
