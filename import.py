@@ -43,6 +43,7 @@ client = Client(options)
 root_part = len(client.webdav.root)
 
 def save_file(client, info, year, month):
+    client.mkdir(f"/Photos/{year}")
     client.mkdir(f"/Photos/{year}/{month}")
     try:
         existing_file = client.info(f"/Photos/{year}/{month}/{info['fname']}")
