@@ -65,7 +65,7 @@ def walker(client, path):
         info["fname"] = info["path"].split("/")[-1]
         print(f"info={info}")
 
-        if info["path"].endswith("/"):
+        if info["isdir"]:
             try:
                 walker(client, info['relative_path'])
             except webdav3.exceptions.RemoteResourceNotFound:
