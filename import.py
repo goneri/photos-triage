@@ -71,6 +71,8 @@ def walker(client, path):
             except webdav3.exceptions.RemoteResourceNotFound:
                 print(f"Cannot walk in {info['relative_path']}")
                 pass
+        elif info["fname"].startswith(".trashed"):
+          print(f"trashed file: skipping")
         elif int(info["size"]) < 100 * 1024:
           print(f"To small: skipping")
         elif date := get_month_from_filename(client, info):
