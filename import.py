@@ -11,12 +11,13 @@ import re
 class CannotParseFilename(Exception):
     pass
 
+
 class CannotParseEXIF(Exception):
     pass
 
+
 class DifferentFileAlreadyExists(Exception):
     pass
-
 
 
 def get_month_from_filename(client, info):
@@ -31,10 +32,12 @@ def get_month_from_filename(client, info):
 def get_month_from_EXIF(client, info):
     client.download_sync(remote_path=info["relative_path"], local_path="/tmp/local")
     local_path = Path("/tmp/local")
-    tags = exifread.process_file(local_path.open('rb'))
+    tags = exifread.process_file(local_path.open("rb"))
     if "EXIF DateTimeOriginal" not in tags:
         return
-    date_obj = datetime.strptime(str(tags['EXIF DateTimeOriginal']), '%Y:%m:%d %H:%M:%S')
+    date_obj = datetime.strptime(
+        str(tags["EXIF DateTimeOriginal"]), "%Y:%m:%d %H:%M:%S"
+    )
     return (str(date_obj.year), f"{date_obj.month:02d}")
 
 
@@ -42,6 +45,7 @@ credentials_file = Path("/secret/credentials")
 options = yaml.safe_load(credentials_file.read_text())
 client = Client(options)
 root_part = len(client.webdav.root)
+
 
 def save_file(client, info, year, month):
     client.mkdir(f"/Photos/{year}")
@@ -67,6 +71,7 @@ def save_file(client, info, year, month):
         client.clean(info["relative_path"])
     return
 
+
 def walker(client, path):
     for info in client.list(path, get_info=True):
         info["relative_path"] = info["path"][root_part:]
@@ -75,14 +80,14 @@ def walker(client, path):
 
         if info["isdir"]:
             try:
-                walker(client, info['relative_path'])
+                walker(client, info["relative_path"])
             except webdav3.exceptions.RemoteResourceNotFound:
                 print(f"Cannot walk in {info['relative_path']}")
                 pass
         elif info["fname"].startswith(".trashed"):
-          print(f"trashed file: skipping")
+            print(f"trashed file: skipping")
         elif int(info["size"]) < 100 * 1024:
-          print(f"To small: skipping")
+            print(f"To small: skipping")
         elif date := get_month_from_filename(client, info):
             year, month = date
             print(f"From filename -> year={year} month={month}")
@@ -91,4 +96,6 @@ def walker(client, path):
             year, month = date
             print(f"From EXIF -> year={year} month={month}")
             save_file(client, info, year, month)
+
+
 walker(client, "Photos/a_trier")
