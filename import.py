@@ -53,8 +53,14 @@ def save_file(client, info, year, month):
     if existing_file:
         print(f"File already exists! existing_file={existing_file}")
     if existing_file is None or existing_file["size"] < info["size"]:
-        print(f"Moving {info['relative_path']} to /Photos/{year}/{month}/{info['fname']}")
-        client.move(remote_path_from=info["relative_path"], remote_path_to=f"/Photos/{year}/{month}/{info['fname']}")
+        print(
+            f"Moving {info['relative_path']} to /Photos/{year}/{month}/{info['fname']}"
+        )
+        client.move(
+            remote_path_from=info["relative_path"],
+            remote_path_to=f"/Photos/{year}/{month}/{info['fname']}",
+            overwrite=True,
+        )
     else:
         print(f"Removing {info['relative_path']}")
         client.clean(info["relative_path"])
