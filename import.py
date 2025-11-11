@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import webdav3.exceptions
 from webdav3.client import Client
 from datetime import datetime

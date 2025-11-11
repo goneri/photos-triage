@@ -1,6 +1,8 @@
-FROM quay.io/fedora/python-311:311
+FROM quay.io/fedora/fedora
 
+RUN dnf install -y python3 python3-pip
 COPY import.py /import.py
-RUN /usr/bin/python3.11 -m pip --no-cache-dir install webdavclient3 exifread PyYAML
+RUN chmod 755 /import.py
+RUN /usr/bin/python3 -m pip --no-cache-dir install webdavclient3 exifread PyYAML
 WORKDIR /
-ENTRYPOINT /usr/bin/python3.11 /import.py
+ENTRYPOINT /import.py
